@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1KMerchCo</title>
+    <style>
+/* =========================================
+           FAN CONCEPTS FORM STYLES
+           ========================================= */
+        .submission-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            background: #111;
+            padding: 2rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        .submission-form label {
+            font-family: 'Impact', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+        .submission-form input[type="text"],
+        .submission-form input[type="file"] {
+            padding: 15px;
+            background-color: #000;
+            border: 1px solid #444;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        .submission-form input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+        /* Custom File Upload Button Styling */
+        input[type="file"]::file-selector-button {
+            background-color: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Impact', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: 0.3s;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: #aaa;
+        }
+        
+/* =========================================
+           GLOBAL THEME STYLES
+           ========================================= */
+        body {
+            font-family: 'Impact', 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #f4f4f4;
+        }
+        
+/* =========================================
+           HEADER & VIDEO BANNER STYLES
+           ========================================= */
+        header {
+            /* Removed the solid background color so video shows through */
+            border-bottom: 2px solid #333;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            overflow: hidden; /* This traps the video inside the header bar */
+        }
+        
+        .header-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Forces the video to crop and fit exactly */
+            z-index: -2; /* Pushes video to the very back */
+            pointer-events: none;
+        }
+
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65); /* Dark tint so the white menu text pops */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10; /* Keeps logo above the video */
+        }
+        .brand-container img {
+            height: 50px;
+            width: 50px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            margin-right: 15px;
+            border: 2px solid #333; 
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10; /* Keeps text above the video */
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            z-index: 10; /* Keeps buttons above the video */
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-left: 1.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        nav button:hover {
+            color: #888;
+        }
+        .cart-btn {
+            background-color: #fff !important;
+            color: #000 !important;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+        .cart-btn:hover {
+            background-color: #ccc !important;
+        }
+        
+/* =========================================
+           PAGE & GRID STYLES
+           ========================================= */
+        .page {
+            display: none; 
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .active-page {
+            display: block; 
+        }
+        .page-title {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 10px;
+            margin-bottom: 2rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        .card {
+            background: #111;
+            border: 1px solid #333;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.05);
+            border-color: #555;
+        }
+        .card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            background-color: #222; 
+        }
+        .card h3 {
+            margin: 15px 0 5px 0;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+        .card p {
+            color: #aaa;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 1.2rem;
+        }
+        
+/* =========================================
+           PRODUCT DETAIL LAYOUT
+           ========================================= */
+        .product-detail-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        .product-detail-layout img {
+            width: 100%;
+            max-width: 500px;
+            object-fit: cover;
+            border: 2px solid #333;
+        }
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        .product-info h2 {
+            font-family: 'Impact', sans-serif;
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+        .buy-btn, .checkout-btn {
+            background-color: #fff;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 1rem;
+        }
+        .buy-btn:hover, .checkout-btn:hover {
+            background-color: #888;
+        }
+        
+/* =========================================
+           CART & CHECKOUT STYLES
+           ========================================= */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #333;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid #333;
+        }
+        .cart-details {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .cart-total-section {
+            text-align: right;
+            margin-top: 2rem;
+            font-size: 1.5rem;
+        }
+        
+        .checkout-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 600px;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+        .checkout-form input {
+            padding: 15px;
+            background-color: #111;
+            border: 1px solid #444;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .checkout-form input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+        .empty-msg {
+            font-family: 'Helvetica Neue', sans-serif;
+            color: #aaa;
+            font-size: 1.2rem;
+        }
+        
+/* =========================================
+           MOBILE RESPONSIVENESS (iPhones)
+           ========================================= */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+                text-align: center;
+            }
+            .brand-container {
+                margin-bottom: 1rem;
+                justify-content: center;
+            }
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            nav button {
+                margin: 0;
+                font-size: 0.9rem;
+                padding: 8px 10px;
+            }
+            .cart-btn {
+                width: 100%; 
+                margin-top: 10px;
+            }
+            .page {
+                padding: 1.5rem 1rem;
+            }
+            .page-title {
+                font-size: 2rem;
+            }
+            .product-info h2 {
+                font-size: 2rem;
+            }
+            .checkout-form input {
+                font-size: 16px; 
+            }
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .cart-details {
+                width: 100%;
+            }
+        }
+        
+/* =========================================
+           CUSTOM ANIMATIONS
+           ========================================= */
+        .explode-effect {
+            animation: popAndFade 0.4s ease-out forwards;
+            position: relative;
+            z-index: 50; 
+            pointer-events: none; 
+        }
+
+        @keyframes popAndFade {
+            0% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+            40% { 
+                transform: scale(1.1); 
+                opacity: 1; 
+                box-shadow: 0 0 40px rgba(255,255,255,0.2); 
+            }
+            100% { 
+                transform: scale(1.6); 
+                opacity: 0; 
+            }
+        }
+        
+/* =========================================
+           FOOTER STYLES
+           ========================================= */
+        footer {
+            background-color: #000;
+            border-top: 2px solid #333;
+            padding: 4rem 2rem 2rem 2rem;
+            margin-top: 4rem;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-col h3 {
+            font-family: 'Impact', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-col ul li {
+            margin-bottom: 1rem;
+        }
+        .footer-col ul li a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .footer-col ul li a:hover {
+            color: #fff;
+        }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #222;
+            padding-top: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+   <header>
+        <video class="header-video" autoplay loop muted playsinline>
+            <source src="header-bg.mp4" type="video/mp4">
+        </video>
+        <div class="header-overlay"></div>
+
+        <div class="brand-container" onclick="navigate('home')">
+            <img src="logo1k.jpg" alt="1K Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'><rect width=\'50\' height=\'50\' fill=\'#333\'/></svg>'">
+            <h1>1KMerchCo</h1>
+        </div>
+        <nav>
+            <button onclick="navigate('hoodies')">Hoodies</button>
+            <button onclick="navigate('sweatpants')">Sweatpants</button>
+            <button onclick="navigate('sweatsuits')">Full Sets</button>
+            <button onclick="navigate('vault')" style="color: #ff0055;">The Vault</button>
+            <button class="cart-btn" onclick="openCart()">Cart (<span id="cart-count">0</span>)</button>
+        </nav>
+    </header>
+
+    <div id="home" class="page active-page">
+        <h2 class="page-title">Keep It 1K</h2>
+        <div class="grid">
+            <div class="card" onclick="navigate('hoodies')">
+                <img src="hoodie3.jpg" alt="Shop Hoodies">
+                <h3>Shop Hoodies</h3>
+            </div>
+            <div class="card" onclick="navigate('sweatpants')">
+                <img src="boneleg.jpg" alt="Shop Sweatpants">
+                <h3>Shop Sweatpants</h3>
+            </div>
+        </div>
+    </div>
+
+    <div id="hoodies" class="page">
+        <h2 class="page-title">Hoodies</h2>
+        <div class="grid">
+            <div class="card" onclick="openProduct('Keep It 1K Pullover', 'hoodie3.jpg', 65.00, 'Heavyweight black pullover hoodie featuring contrast white stitching and the signature 1K bone logo.')">
+                <img src="hoodie3.jpg" alt="Keep It 1K Pullover">
+                <h3>Keep It 1K Pullover</h3>
+                <p>$65.00</p>
+            </div>
+            <div class="card" onclick="openProduct('1K Bone Zip-Up', 'hoodie2.jpg', 70.00, 'Premium pink zip-up hoodie featuring a plush 1K bone logo patch on the chest and oversized bone sleeve details.')">
+                <img src="hoodie2.jpg" alt="1K Bone Zip-Up">
+                <h3>1K Bone Zip-Up</h3>
+                <p>$79.99</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="sweatpants" class="page">
+        <h2 class="page-title">Sweatpants</h2>
+        <div class="grid">
+            <div class="card" onclick="openProduct('1K Bone Sweatpants', 'boneleg.jpg', 55.00, 'Premium fleece sweatpants featuring our signature 1K bone applique running down the leg.')">
+                <img src="boneleg.jpg" alt="1K Sweatpants">
+                <h3>1K Bone Sweatpants</h3>
+                <p>$69.99</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="sweatsuits" class="page">
+        <h2 class="page-title">Full Sweatsuits</h2>
+        <div class="grid">
+            <div class="card" onclick="openProduct('1K Signature Set', 'jr3.jpg', 110.00, 'Get the complete look. Bundles our heavyweight top and signature bone-detailed sweatpants.')">
+                <img src="jr3.jpg" alt="Full Sweatsuit">
+                <h3>1K Signature Set</h3>
+                <p>$149.99</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="vault" class="page">
+        <h2 class="page-title">The Vault: Artist Exclusives</h2>
+        <p style="color: #aaa; font-size: 1.2rem; margin-top: -1rem; margin-bottom: 2rem;">Handpicked fits. Shop the exact gear seen on stage and in the studio.</p>
+        <div class="grid">
+            <div class="card" onclick="triggerExplosion(this, '1K Studio Sweatsuit', 'jr3.jpg', 110.00, 'The official studio uniform. Heavyweight top and signature bone-detailed sweatpants.')">
+                <img src="jr3.jpg" alt="Artist wearing Sweatsuit">
+                <h3>Studio Set</h3>
+                <p>$110.00</p>
+            </div>
+            <div class="card" onclick="triggerExplosion(this, '1K Bone Sweatpants', 'jr1.jpg', 55.00, 'Premium fleece sweatpants featuring our signature 1K bone applique running down the leg.')">
+                <img src="jr1.jpg" alt="Artist holding sweatpants">
+                <h3>Signature Bottoms</h3>
+                <p>$55.00</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="product-page" class="page">
+        <div class="product-detail-layout">
+            <img id="product-img" src="" alt="Product Image">
+            <div class="product-info">
+                <h2 id="product-title">Product Name</h2>
+                <h3 id="product-price-display">$0.00</h3>
+                <p id="product-desc" style="color: #ddd; font-size: 1.2rem; line-height: 1.5;"></p>
+                <button class="buy-btn" id="add-to-cart-btn">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart" class="page">
+        <h2 class="page-title">Your Cart</h2>
+        <div id="cart-items-container">
+        </div>
+        <div class="cart-total-section">
+            <p>Total: <strong id="cart-total-price">$0.00</strong></p>
+            <button class="checkout-btn" id="go-to-checkout-btn" onclick="navigate('checkout')" style="display:none; float: right;">Proceed to Checkout</button>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+
+    <div id="checkout" class="page">
+        <h2 class="page-title">Checkout</h2>
+        <div class="product-detail-layout">
+            <div class="product-info">
+                <form class="checkout-form" onsubmit="processOrder(event)">
+                    <h3 style="font-family: 'Impact'; margin-bottom: 5px;">Shipping Info</h3>
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="text" placeholder="Street Address" required>
+                    <input type="text" placeholder="City, State, ZIP" required>
+                    
+                    <h3 style="font-family: 'Impact'; margin-top: 20px; margin-bottom: 5px;">Payment Details</h3>
+                    <input type="text" placeholder="Card Number" required maxlength="16">
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="text" placeholder="MM/YY" required style="width: 50%;">
+                        <input type="text" placeholder="CVC" required style="width: 50%;">
+                    </div>
+                    
+                    <button type="submit" class="checkout-btn" style="background-color: #00ff00; color: #000; margin-top: 2rem;">Place Order Now</button>
+                </form>
+            </div>
+            <div>
+                <h3 style="font-family: 'Impact';">Order Summary</h3>
+                <p style="font-family: 'Helvetica'; color: #aaa;">Total Amount Due: <strong id="checkout-total" style="color:#fff; font-size: 1.5rem;">$0.00</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="success" class="page" style="text-align: center; padding-top: 10vh;">
+        <h2 style="font-size: 4rem; color: #00ff00;">ORDER CONFIRMED</h2>
+        <p style="font-family: 'Helvetica'; font-size: 1.5rem; color: #aaa;">Thank you for keeping it 1K. Your gear is being prepped for shipment.</p>
+        <button class="checkout-btn" onclick="navigate('home')" style="margin-top: 2rem;">Return to Store</button>
+    </div>
+
+    <div id="fan-concepts" class="page">
+        <h2 class="page-title">The 1K Family</h2>
+        <p style="color: #aaa; font-size: 1.2rem; margin-top: -1rem; margin-bottom: 2rem; max-width: 600px; line-height: 1.5;">
+            You are the advertisement. Post your fits, tag <strong>@1KMerchCo</strong>, and watch yourself hit the live wall.
+        </p>
+        
+        <div id="social-feed-container" style="background: #111; border: 1px solid #333; border-radius: 8px; padding: 3rem; text-align: center;">
+            <h3 style="font-family: 'Impact'; color: #555; font-size: 2rem; margin-bottom: 10px;">[ LIVE FEED LOADING ]</h3>
+            <p style="color: #666; font-family: 'Helvetica Neue';">
+                Once the brand is live, you will paste a free widget code here (from a site like Curator.io or Elfsight).<br>
+                It will automatically pull every picture someone posts tagging the brand into a clean grid right here.
+            </p>
+        </div>
+
+        <button class="buy-btn" onclick="window.open('https://instagram.com', '_blank')" style="margin-top: 2rem; width: 100%; max-width: 400px; display: block; margin-left: auto; margin-right: auto;">
+            Post Your Fit Now
+        </button>
+    </div>
+
+    <div id="concept-success" class="page" style="text-align: center; padding-top: 10vh;">
+        <h2 style="font-size: 4rem; color: #fff;">LOCKED IN</h2>
+        <p style="font-family: 'Helvetica'; font-size: 1.5rem; color: #aaa;">Your submission has been sent to the team. If we rock with it, you'll see it live.</p>
+        <button class="checkout-btn" onclick="navigate('home')" style="margin-top: 2rem;">Back to Store</button>
+    </div>
+
+    <script>
+        // --- FAN CONCEPT SUBMISSION LOGIC ---
+        function submitConcept(event) {
+            event.preventDefault(); 
+            navigate('concept-success');
+        }
+
+        // --- STATE MANAGEMENT ---
+        let cart = [];
+        let currentProductSelection = null;
+
+        // --- NAVIGATION ---
+        function navigate(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            window.scrollTo(0,0);
+        }
+
+        // --- ANIMATION LOGIC ---
+        function triggerExplosion(element, title, imgUrl, price, desc) {
+            element.classList.add('explode-effect');
+            setTimeout(() => {
+                openProduct(title, imgUrl, price, desc);
+                element.classList.remove('explode-effect');
+            }, 400); 
+        }
+
+        // --- PRODUCT VIEW ---
+        function openProduct(title, imgUrl, price, desc) {
+            document.getElementById('product-title').innerText = title;
+            document.getElementById('product-price-display').innerText = '$' + price.toFixed(2);
+            document.getElementById('product-desc').innerText = desc;
+            document.getElementById('product-img').src = imgUrl;
+
+            currentProductSelection = { title, imgUrl, price };
+
+            document.getElementById('add-to-cart-btn').onclick = function() {
+                addToCart(currentProductSelection);
+            };
+
+            navigate('product-page');
+        }
+
+        // --- CART LOGIC ---
+        function addToCart(product) {
+            cart.push(product);
+            document.getElementById('cart-count').innerText = cart.length;
+            alert(product.title + ' added to your cart!');
+        }
+
+        function openCart() {
+            const container = document.getElementById('cart-items-container');
+            const checkoutBtn = document.getElementById('go-to-checkout-btn');
+            
+            container.innerHTML = ''; 
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="empty-msg">Your cart is looking a little empty.</p>';
+                checkoutBtn.style.display = 'none';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-details">
+                                <img src="${item.imgUrl}" alt="${item.title}">
+                                <h3 style="margin: 0;">${item.title}</h3>
+                            </div>
+                            <div style="font-size: 1.2rem; font-weight: bold;">$${item.price.toFixed(2)}</div>
+                            <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer; font-family:'Impact'; font-size: 1.2rem;">X</button>
+                        </div>
+                    `;
+                });
+                checkoutBtn.style.display = 'block';
+            }
+
+            const totalString = '$' + total.toFixed(2);
+            document.getElementById('cart-total-price').innerText = totalString;
+            document.getElementById('checkout-total').innerText = totalString;
+            
+            navigate('cart');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1); 
+            document.getElementById('cart-count').innerText = cart.length;
+            openCart(); 
+        }
+
+        // --- CHECKOUT LOGIC ---
+        function processOrder(event) {
+            event.preventDefault(); 
+            cart = [];
+            document.getElementById('cart-count').innerText = '0';
+            navigate('success');
+        }
+    </script>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>1KMerchCo</h3>
+                <p style="color: #aaa; line-height: 1.5;">Keep It Authentic.<br>Official merch and streetwear drops. Join the family.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a onclick="alert('Contact form coming soon!')">Contact Us</a></li>
+                    <li><a onclick="alert('Shipping info coming soon!')">Shipping & Returns</a></li>
+                    <li><a onclick="alert('FAQs coming soon!')">FAQs</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Community</h3>
+                <ul>
+                    <li><a href="https://www.instagram.com/1kmerch_co/" target="_blank">Instagram</a></li>
+                    <li><a href="https://twitter.com" target="_blank">Twitter / X</a></li>
+                    <li><a href="https://tiktok.com" target="_blank">TikTok</a></li>
+                    <li><a onclick="navigate('fan-concepts')">Fan Concepts & Fits</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 1KMerchCo. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
